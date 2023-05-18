@@ -4,20 +4,30 @@ import * as tf from "@tensorflow/tfjs-node";
 
 const model = tf.sequential();
 
-model.add(tf.layers.dense({ inputShape: [2], units: 2, activation: "sigmoid" }));
-model.add(tf.layers.dense({ units: 1, activation: "sigmoid" }));
+model.add(tf.layers.dense({ units: 1, inputShape: [1], activation: "relu" }));
+model.add(tf.layers.dense({ units: 5, activation: "relu" }));
+//model.add(tf.layers.dense({ units: 3, activation: "relu" }));
+model.add(tf.layers.dense({ units: 1, activation: "relu" }));
 
 // loss meansquarederror, optimizer adam with learning rate 0.02
 model.compile({ loss: "meanSquaredError", optimizer: tf.train.adam(0.02) });
 
 model.summary();
 
+let input_data = [];
+let output_data = [];
 // create training data
-const xs = tf.tensor2d([[0, 0], [0, 1], [1, 0], [1, 1]], undefined);
-const ys = tf.tensor2d([[0], [1], [1], [0]], undefined);
+for (let a = 0; a < 10; a++) {
+    for (let b = 0; b < 10; b++) {
+        input_data.push([a]);
+        output_data.push([2 * a + 3]);
+    }
+}
+
+console.log(output_data);
 
 // train the model
-await model.fit(xs, ys, { epochs: 10000 });
-model.predict(xs).print();
+await model.fit(tf.tensor(input_data), tf.tensor(output_data), { epochs: 1000 });
+model.predict(tf.tensor(input_data)).print();
 
 await model.save("file://xor-model");
