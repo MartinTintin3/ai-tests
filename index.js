@@ -17,7 +17,7 @@ const xs = tf.tensor2d([[0, 0], [0, 1], [1, 0], [1, 1]], undefined);
 const ys = tf.tensor2d([[0], [1], [1], [0]], undefined);
 
 // train the model
-await model.fit(xs, ys, { epochs: 500 });
+await model.fit(xs, ys, { epochs: 10000 });
 model.predict(xs).print();
 
 await model.save("file://xor-model");
